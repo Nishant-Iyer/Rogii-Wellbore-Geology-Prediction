@@ -240,6 +240,7 @@ if not plane_fit_success:
 
 # 2. Back-calculate top and compute baseline TVT
 known_mask = df_hw['TVT_input'].notna()
+unknown_mask = ~known_mask
 tvt_input = df_hw.loc[known_mask, 'TVT_input'].values
 z_known = df_hw.loc[known_mask, 'Z'].values
 pred_astnl_z_known = pred_astnl_z[known_mask]
