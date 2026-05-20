@@ -35,7 +35,7 @@ st.markdown("""
     }
     
     /* Strict Premium Typography Hierarchy */
-    h1 {
+    h1, [data-testid="stMarkdownContainer"] h1 {
         font-size: 2.2rem !important;
         font-family: 'Sora', sans-serif !important;
         font-weight: 700 !important;
@@ -44,7 +44,7 @@ st.markdown("""
         color: #ffffff !important;
     }
     
-    h2 {
+    h2, [data-testid="stMarkdownContainer"] h2 {
         font-size: 1.4rem !important;
         font-family: 'Sora', sans-serif !important;
         font-weight: 600 !important;
@@ -54,21 +54,28 @@ st.markdown("""
         color: #ffffff !important;
     }
     
-    h3 {
-        font-size: 1.12rem !important;
+    h3, [data-testid="stMarkdownContainer"] h3 {
+        font-size: 1.15rem !important;
         font-family: 'Sora', sans-serif !important;
         font-weight: 600 !important;
         letter-spacing: -0.01em !important;
-        margin-top: 0.8rem !important;
-        margin-bottom: 0.4rem !important;
+        margin-top: 1.0rem !important;
+        margin-bottom: 0.5rem !important;
         color: #ffffff !important;
+    }
+
+    h4, [data-testid="stMarkdownContainer"] h4 {
+        font-size: 1.02rem !important;
+        font-family: 'Sora', sans-serif !important;
+        font-weight: 600 !important;
+        color: #00d4ff !important;
     }
     
     p, li, label, span, div {
         font-family: 'DM Sans', sans-serif !important;
     }
     
-    .stMarkdown p {
+    .stMarkdown p, [data-testid="stMarkdownContainer"] p, .stMarkdown li, [data-testid="stMarkdownContainer"] li {
         font-size: 0.95rem !important;
         line-height: 1.6 !important;
         color: #cccccc !important;
