@@ -87,9 +87,18 @@ st.markdown("""
 # Cache data loading for speed
 @st.cache_data
 def load_wells_summary(data_dir):
+    train_paths = glob.glob(os.path.join(data_dir, 'train', '*__horizontal_well.csv'))
+    test_paths = glob.glob(os.path.join(data_dir, 'test', '*__horizontal_well.csv'))
+    
+    # Fallback if no files found
+    if not train_paths and not test_paths:
+        data_dir = 'sample_data'
+        train_paths = glob.glob(os.path.join(data_dir, 'train', '*__horizontal_well.csv'))
+        test_paths = glob.glob(os.path.join(data_dir, 'test', '*__horizontal_well.csv'))
+        
     records = []
     # Train
-    for path in glob.glob(os.path.join(data_dir, 'train', '*__horizontal_well.csv')):
+    for path in train_paths:
         well_id = os.path.basename(path).split('__')[0]
         df = pd.read_csv(path, usecols=['X', 'Y', 'Z', 'MD'])
         records.append({
@@ -102,7 +111,7 @@ def load_wells_summary(data_dir):
             'set': 'train'
         })
     # Test
-    for path in glob.glob(os.path.join(data_dir, 'test', '*__horizontal_well.csv')):
+    for path in test_paths:
         well_id = os.path.basename(path).split('__')[0]
         df = pd.read_csv(path, usecols=['X', 'Y', 'Z', 'MD'])
         records.append({
@@ -116,11 +125,11 @@ def load_wells_summary(data_dir):
         })
     df_summary = pd.DataFrame(records)
     kdtree = cKDTree(df_summary[df_summary['set'] == 'train'][['X', 'Y']].values) if len(df_summary) > 0 else None
-    return df_summary, kdtree
+    return df_summary, kdtree, data_dir
 
 # Load all summaries
 DATA_DIR = 'data'
-df_summary, kdtree = load_wells_summary(DATA_DIR)
+df_summary, kdtree, active_data_dir = load_wells_summary(DATA_DIR)
 
 # App Title & Navigation
 st.markdown("<h1>⚡ ROGII WELLBORE GEOLOGY AI & OPTIMIZATION DASHBOARD</h1>", unsafe_allow_html=True)
@@ -140,9 +149,9 @@ df_hw = pd.read_csv(selected_well_row['path'])
 df_hw['well_id'] = selected_well_id
 
 if well_set == 'train':
-    df_tw = pd.read_csv(os.path.join(DATA_DIR, 'train', f"{selected_well_id}__typewell.csv"))
+    df_tw = pd.read_csv(os.path.join(active_data_dir, 'train', f"{selected_well_id}__typewell.csv"))
 else:
-    df_tw = pd.read_csv(os.path.join(DATA_DIR, 'test', f"{selected_well_id}__typewell.csv"))
+    df_tw = pd.read_csv(os.path.join(active_data_dir, 'test', f"{selected_well_id}__typewell.csv"))
 
 # Sidebar Hyperparameters for Real-time Viterbi Run
 st.sidebar.markdown("---")
@@ -205,7 +214,7 @@ neighbor_ids = train_wells_only.iloc[indices]['well_id'].values
 # Load neighbor dfs to fit ASTNL plane
 neighbor_dfs = []
 for nid in neighbor_ids:
-    path = os.path.join(DATA_DIR, 'train', f'{nid}__horizontal_well.csv')
+    path = os.path.join(active_data_dir, 'train', f'{nid}__horizontal_well.csv')
     if os.path.exists(path):
         neighbor_dfs.append(pd.read_csv(path))
 
@@ -403,7 +412,7 @@ with tab2:
     
     # 2. Plot neighbors in 3D (translucent)
     for nid in neighbor_ids:
-        path = os.path.join(DATA_DIR, 'train', f'{nid}__horizontal_well.csv')
+        path = os.path.join(active_data_dir, 'train', f'{nid}__horizontal_well.csv')
         if os.path.exists(path):
             df_n = pd.read_csv(path)
             fig_3d.add_trace(go.Scatter3d(
