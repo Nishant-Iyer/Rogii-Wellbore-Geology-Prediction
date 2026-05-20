@@ -206,10 +206,18 @@ with col4:
 # 1. Neighbor Dipping Plane
 train_wells_only = df_summary[df_summary['set'] == 'train']
 train_coords = train_wells_only[['X', 'Y']].values
-kdtree_train = cKDTree(train_coords)
 
-dists, indices = kdtree_train.query([selected_well_row['X'], selected_well_row['Y']], k=5)
-neighbor_ids = train_wells_only.iloc[indices]['well_id'].values
+plane_fit_success = False
+if len(train_wells_only) > 0:
+    kdtree_train = cKDTree(train_coords)
+    k_neighbors = min(5, len(train_wells_only))
+    dists, indices = kdtree_train.query([selected_well_row['X'], selected_well_row['Y']], k=k_neighbors)
+    if k_neighbors == 1:
+        indices = [indices]
+    indices = [idx for idx in indices if idx < len(train_wells_only)]
+    neighbor_ids = train_wells_only.iloc[indices]['well_id'].values
+else:
+    neighbor_ids = []
 
 # Load neighbor dfs to fit ASTNL plane
 neighbor_dfs = []
@@ -218,12 +226,17 @@ for nid in neighbor_ids:
     if os.path.exists(path):
         neighbor_dfs.append(pd.read_csv(path))
 
-df_combined = pd.concat(neighbor_dfs, ignore_index=True)
-df_f = df_combined.dropna(subset=['X', 'Y', 'ASTNL'])
+if len(neighbor_dfs) > 0:
+    df_combined = pd.concat(neighbor_dfs, ignore_index=True)
+    df_f = df_combined.dropna(subset=['X', 'Y', 'ASTNL'])
+    if len(df_f) > 10:
+        lr_astnl = LinearRegression()
+        lr_astnl.fit(df_f[['X', 'Y']].values, df_f['ASTNL'].values)
+        pred_astnl_z = lr_astnl.predict(df_hw[['X', 'Y']].values)
+        plane_fit_success = True
 
-lr_astnl = LinearRegression()
-lr_astnl.fit(df_f[['X', 'Y']].values, df_f['ASTNL'].values)
-pred_astnl_z = lr_astnl.predict(df_hw[['X', 'Y']].values)
+if not plane_fit_success:
+    pred_astnl_z = np.full(len(df_hw), df_hw['Z'].mean())
 
 # 2. Back-calculate top and compute baseline TVT
 known_mask = df_hw['TVT_input'].notna()
@@ -429,13 +442,18 @@ with tab2:
     xx, yy = np.meshgrid(x_range, y_range)
     
     # Dip plane elevations
-    zz_plane = lr_astnl.predict(np.column_stack([xx.ravel(), yy.ravel()])).reshape(xx.shape)
+    if plane_fit_success:
+        zz_plane = lr_astnl.predict(np.column_stack([xx.ravel(), yy.ravel()])).reshape(xx.shape)
+        plane_name = 'Fitted Dipping Plane (ASTNL)'
+    else:
+        zz_plane = np.full(xx.shape, df_hw['Z'].mean())
+        plane_name = 'Regional Mean Elevation Plane'
     
     fig_3d.add_trace(go.Surface(
         x=xx, y=yy, z=zz_plane,
         colorscale='Viridis',
         opacity=0.35,
-        name='Fitted Dipping Plane (ASTNL)',
+        name=plane_name,
         showscale=False
     ))
     
