@@ -130,25 +130,33 @@ st.markdown("""
         background: rgba(10, 10, 10, 0.8) !important;
         backdrop-filter: blur(25px) !important;
         border: 1px solid rgba(0, 212, 255, 0.15) !important;
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 20px;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+        border-radius: 16px !important;
+        padding: 20px 16px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s !important;
+        text-align: center !important;
+        min-height: 140px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
     
     .card-container:hover {
-        transform: translateY(-4px);
+        transform: translateY(-4px) !important;
         border-color: rgba(168, 85, 247, 0.5) !important;
-        box-shadow: 0 12px 30px rgba(168, 85, 247, 0.25);
+        box-shadow: 0 12px 30px rgba(168, 85, 247, 0.25) !important;
     }
     
     .metric-glowing {
         font-family: 'Sora', sans-serif !important;
-        font-size: 1.7rem !important;
+        font-size: 1.45rem !important;
         font-weight: 700 !important;
         color: #ffffff !important;
-        margin: 5px 0;
+        margin: 6px 0 !important;
+        text-align: center !important;
+        white-space: nowrap !important;
     }
     
     .metric-title {
@@ -157,6 +165,7 @@ st.markdown("""
         text-transform: uppercase !important;
         letter-spacing: 0.08em !important;
         color: #aaaaaa !important;
+        text-align: center !important;
     }
     
     .stButton>button {
