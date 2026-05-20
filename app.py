@@ -19,70 +19,224 @@ st.set_page_config(
 
 # Custom Premium CSS Injection
 st.markdown("""
-    <style>
-        /* Main background and styling */
-        .stApp {
-            background: linear-gradient(135deg, #0b0d12 0%, #141822 100%);
-            color: #ecf0f1;
-            font-family: 'Inter', -apple-system, sans-serif;
-        }
-        
-        /* Glassmorphism containers */
-        div.stMarkdown div[data-testid="stMarkdownContainer"] h1 {
-            color: #00f2fe;
-            text-shadow: 0 0 10px rgba(0, 242, 254, 0.4);
-        }
-        
-        .card-container {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-        }
-        
-        .metric-glowing {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #39ff14;
-            text-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
-            margin: 5px 0;
-        }
-        
-        .metric-title {
-            font-size: 0.9rem;
-            color: #8a9ba8;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-        
-        /* Sidebar styling */
-        [data-testid="stSidebar"] {
-            background-color: #080a0e !important;
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        /* Custom buttons */
-        .stButton>button {
-            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-            color: #080a0e;
-            font-weight: 700;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.3);
-        }
-        
-        .stButton>button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.5);
-            color: #080a0e;
-        }
-    </style>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+    
+    html, body, [class*="css"], .stApp {
+        background: radial-gradient(circle at 50% 50%, #110926 0%, #050505 100%) !important;
+        background-attachment: fixed !important;
+        color: #ffffff;
+        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    
+    .main {
+        background-color: transparent !important;
+        color: #ffffff;
+    }
+    
+    /* Strict Premium Typography Hierarchy */
+    h1 {
+        font-size: 2.2rem !important;
+        font-family: 'Sora', sans-serif !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.03em !important;
+        margin-bottom: 0.5rem !important;
+        color: #ffffff !important;
+    }
+    
+    h2 {
+        font-size: 1.4rem !important;
+        font-family: 'Sora', sans-serif !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.02em !important;
+        margin-top: 1.2rem !important;
+        margin-bottom: 0.6rem !important;
+        color: #ffffff !important;
+    }
+    
+    h3 {
+        font-size: 1.12rem !important;
+        font-family: 'Sora', sans-serif !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.01em !important;
+        margin-top: 0.8rem !important;
+        margin-bottom: 0.4rem !important;
+        color: #ffffff !important;
+    }
+    
+    p, li, label, span, div {
+        font-family: 'DM Sans', sans-serif !important;
+    }
+    
+    .stMarkdown p {
+        font-size: 0.95rem !important;
+        line-height: 1.6 !important;
+        color: #cccccc !important;
+    }
+    
+    .gradient-text {
+        background: linear-gradient(135deg, #00d4ff 0%, #a855f7 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+    }
+    
+    [data-testid="stSidebar"] {
+        background-color: rgba(8, 8, 8, 0.95) !important;
+        backdrop-filter: blur(15px) !important;
+        border-right: 1px solid rgba(0, 212, 255, 0.1) !important;
+    }
+    
+    /* Custom design for Streamlit Metrics */
+    div[data-testid="stMetricValue"] {
+        font-family: 'Sora', sans-serif !important;
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+    }
+    
+    div[data-testid="stMetricLabel"] {
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.78rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+        color: #aaaaaa !important;
+    }
+    
+    div[data-testid="stMetricDelta"] {
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.85rem !important;
+    }
+    
+    [data-testid="metric-container"] {
+        background: rgba(10, 10, 10, 0.8) !important;
+        backdrop-filter: blur(25px) !important;
+        border: 1px solid rgba(0, 212, 255, 0.15) !important;
+        border-radius: 16px !important;
+        padding: 16px 12px !important;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+        text-align: center !important;
+        min-height: 120px !important;
+    }
+    
+    .card-container {
+        background: rgba(10, 10, 10, 0.8) !important;
+        backdrop-filter: blur(25px) !important;
+        border: 1px solid rgba(0, 212, 255, 0.15) !important;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s;
+    }
+    
+    .card-container:hover {
+        transform: translateY(-4px);
+        border-color: rgba(168, 85, 247, 0.5) !important;
+        box-shadow: 0 12px 30px rgba(168, 85, 247, 0.25);
+    }
+    
+    .metric-glowing {
+        font-family: 'Sora', sans-serif !important;
+        font-size: 1.7rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
+        margin: 5px 0;
+    }
+    
+    .metric-title {
+        font-family: 'DM Sans', sans-serif !important;
+        font-size: 0.78rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.08em !important;
+        color: #aaaaaa !important;
+    }
+    
+    .stButton>button {
+        background: linear-gradient(135deg, #00d4ff 0%, #a855f7 100%) !important;
+        color: #050505 !important;
+        border-radius: 12px !important;
+        font-weight: 700 !important;
+        border: none !important;
+        padding: 12px 28px !important;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2) !important;
+    }
+    
+    .stButton>button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(168, 85, 247, 0.4) !important;
+        color: #050505 !important;
+    }
+    
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 24px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: transparent;
+        border-radius: 4px;
+        color: #888888;
+        font-size: 1.05rem;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+    
+    .stTabs [data-baseweb="tab"]:hover {
+        color: #ffffff;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        color: #00d4ff !important;
+        border-bottom-color: #00d4ff !important;
+    }
+    
+    /* Streamlit slider customization */
+    .stSlider [data-baseweb="slider"] [role="slider"] {
+        background-color: #00d4ff !important;
+        border: 2px solid #a855f7 !important;
+        width: 18px !important;
+        height: 18px !important;
+    }
+    .stSlider [data-baseweb="slider"] > div > div > div {
+        background: linear-gradient(90deg, #00d4ff, #a855f7) !important;
+    }
+    
+    /* Custom style for numbers inputs, selectors, and dropdowns */
+    div[data-baseweb="input"] {
+        background-color: rgba(10, 10, 10, 0.8) !important;
+        border: 1px solid rgba(0, 212, 255, 0.15) !important;
+        border-radius: 10px !important;
+    }
+    div[data-baseweb="input"]:focus-within {
+        border-color: #a855f7 !important;
+    }
+    div[data-baseweb="select"] {
+        background-color: rgba(10, 10, 10, 0.8) !important;
+        border: 1px solid rgba(0, 212, 255, 0.15) !important;
+        border-radius: 10px !important;
+    }
+</style>
 """, unsafe_allow_html=True)
+
+PLOTLY_LAYOUT_THEME = {
+    "paper_bgcolor": "rgba(0,0,0,0)",
+    "plot_bgcolor": "rgba(0,0,0,0)",
+    "font": {"color": "#ffffff", "family": "DM Sans, sans-serif"},
+    "title_font": {"family": "Sora, sans-serif", "size": 15, "color": "#ffffff"},
+    "legend": {"font": {"family": "DM Sans", "size": 11, "color": "#ffffff"}},
+    "colorway": ["#00d4ff", "#a855f7", "#34d399", "#fbbf24", "#f87171"]
+}
+
+PLOTLY_AXIS_THEME = {
+    "gridcolor": "rgba(255, 255, 255, 0.05)",
+    "zerolinecolor": "rgba(255, 255, 255, 0.1)",
+    "title_font": {"family": "DM Sans", "size": 12, "color": "#aaaaaa"},
+    "tickfont": {"family": "DM Sans", "size": 11, "color": "#888888"}
+}
 
 # Cache data loading for speed
 @st.cache_data
@@ -132,11 +286,11 @@ DATA_DIR = 'data'
 df_summary, kdtree, active_data_dir = load_wells_summary(DATA_DIR)
 
 # App Title & Navigation
-st.markdown("<h1>⚡ ROGII WELLBORE GEOLOGY AI & OPTIMIZATION DASHBOARD</h1>", unsafe_allow_html=True)
-st.markdown("<p style='color:#8a9ba8;'>Geophysically-Constrained Viterbi Alignment & Dipping Plane Solver</p>", unsafe_allow_html=True)
+st.markdown("<h1>⚡ <span class='gradient-text'>ROGII WELLBORE GEOLOGY AI & OPTIMIZATION</span></h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:#8a9ba8; font-family: \"Sora\", sans-serif; font-size: 1.02rem;'>Geophysically-Constrained Viterbi Alignment & Dipping Plane Solver</p>", unsafe_allow_html=True)
 
 # Sidebar controls
-st.sidebar.markdown("<h2 style='color:#00f2fe;'>📐 Control Panel</h2>", unsafe_allow_html=True)
+st.sidebar.markdown("<h2 style='color:#ffffff;'><span class='gradient-text'>📐 Control Panel</span></h2>", unsafe_allow_html=True)
 
 # Select a well to visualize
 well_list = df_summary['well_id'].unique()
@@ -350,10 +504,12 @@ with tab1:
             title="TVT Profile along Measured Depth (MD)",
             xaxis_title="Measured Depth (MD) [ft]",
             yaxis_title="True Vertical Thickness (TVT) [ft]",
-            template="plotly_dark",
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            margin=dict(l=40, r=40, t=80, b=40)
+            margin=dict(l=40, r=40, t=80, b=40),
+            **PLOTLY_LAYOUT_THEME
         )
+        fig_tvt.update_xaxes(**PLOTLY_AXIS_THEME)
+        fig_tvt.update_yaxes(**PLOTLY_AXIS_THEME)
         st.plotly_chart(fig_tvt, use_container_width=True)
         
     with col_right:
@@ -377,10 +533,15 @@ with tab1:
         fig_gr_hw = px.line(
             df_hw, x='MD', y='GR',
             title='Horizontal Wellbore Gamma Ray (GR) Log',
-            color_discrete_sequence=['#ffb199']
+            color_discrete_sequence=['#a855f7']
         )
         fig_gr_hw.add_vline(x=ps_md, line_width=2, line_dash="dash", line_color="#f6d365")
-        fig_gr_hw.update_layout(template="plotly_dark")
+        fig_gr_hw.update_layout(
+            margin=dict(l=40, r=40, t=80, b=40),
+            **PLOTLY_LAYOUT_THEME
+        )
+        fig_gr_hw.update_xaxes(**PLOTLY_AXIS_THEME)
+        fig_gr_hw.update_yaxes(**PLOTLY_AXIS_THEME)
         st.plotly_chart(fig_gr_hw, use_container_width=True)
         
     with col_gr_tw:
@@ -406,8 +567,12 @@ with tab1:
             title='Typewell Reference Log matched with Viterbi TVT (Evaluation Zone)',
             xaxis_title='TVT Depth [ft]',
             yaxis_title='Gamma Ray (GR) [API]',
-            template="plotly_dark"
+            margin=dict(l=40, r=40, t=80, b=40),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            **PLOTLY_LAYOUT_THEME
         )
+        fig_gr_tw.update_xaxes(**PLOTLY_AXIS_THEME)
+        fig_gr_tw.update_yaxes(**PLOTLY_AXIS_THEME)
         st.plotly_chart(fig_gr_tw, use_container_width=True)
 
 with tab2:
@@ -460,14 +625,35 @@ with tab2:
     
     fig_3d.update_layout(
         scene=dict(
-            xaxis_title='X Coordinate [ft]',
-            yaxis_title='Y Coordinate [ft]',
-            zaxis_title='Z Elevation [ft]',
+            xaxis=dict(
+                title='X Coordinate [ft]',
+                backgroundcolor="rgba(0,0,0,0)",
+                gridcolor="rgba(255,255,255,0.05)",
+                showbackground=True,
+                zerolinecolor="rgba(255,255,255,0.1)",
+                tickfont=dict(color="#888888")
+            ),
+            yaxis=dict(
+                title='Y Coordinate [ft]',
+                backgroundcolor="rgba(0,0,0,0)",
+                gridcolor="rgba(255,255,255,0.05)",
+                showbackground=True,
+                zerolinecolor="rgba(255,255,255,0.1)",
+                tickfont=dict(color="#888888")
+            ),
+            zaxis=dict(
+                title='Z Elevation [ft]',
+                backgroundcolor="rgba(0,0,0,0)",
+                gridcolor="rgba(255,255,255,0.05)",
+                showbackground=True,
+                zerolinecolor="rgba(255,255,255,0.1)",
+                tickfont=dict(color="#888888")
+            ),
             aspectmode='data'
         ),
-        template="plotly_dark",
         margin=dict(l=0, r=0, b=0, t=40),
-        height=650
+        height=650,
+        **PLOTLY_LAYOUT_THEME
     )
     st.plotly_chart(fig_3d, use_container_width=True)
 
