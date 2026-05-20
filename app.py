@@ -531,16 +531,13 @@ with tab1:
         st.plotly_chart(fig_tvt, use_container_width=True)
         
     with col_right:
-        # Mini metrics sidebar
-        st.markdown("<div class='card-container'>", unsafe_allow_html=True)
-        st.markdown("<h4 style='color:#4facfe;margin-top:0;'>Live Simulator Metrics</h4>", unsafe_allow_html=True)
+        st.markdown("<h3 style='margin-top:0;'><span class='gradient-text'>Live Simulator Metrics</span></h3>", unsafe_allow_html=True)
         if rmse_dp is not None:
             st.metric("Viterbi DP RMSE", f"{rmse_dp:.2f} ft", delta=f"{rmse_dp - rmse_base:.2f} vs Baseline")
             st.metric("Damped Ref RMSE", f"{rmse_ref:.2f} ft")
             st.metric("Baseline Plane RMSE", f"{rmse_base:.2f} ft")
         else:
             st.info("Validation metrics only available for Training Set wells (where true TVT is populated in evaluation zone).")
-        st.markdown("</div>", unsafe_allow_html=True)
         
     # Bottom: GR correlation view
     st.subheader("Gamma Ray Log Correlation Match")
