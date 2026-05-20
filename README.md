@@ -76,3 +76,10 @@ To generate the final predictions and run the validation suite:
 python src/predict.py
 ```
 This will output `submission.csv` in the root folder, ready for submission!
+
+### 5. Launch the Streamlit Dashboard
+To launch the interactive, high-fidelity visualization dashboard locally:
+```bash
+streamlit run app.py
+```
+This starts a local development server at `http://localhost:8501` featuring real-time parameter tuning, 3D wellbore trajectory plotting, and Viterbi alignment simulations.
