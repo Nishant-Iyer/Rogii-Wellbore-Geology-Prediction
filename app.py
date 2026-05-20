@@ -329,9 +329,6 @@ w_smooth = st.sidebar.slider("Smoothness Cost ($w_{smooth}$):", min_value=0.1, m
 w_ref = st.sidebar.slider("Ref Pull Cost ($w_{ref}$):", min_value=0.001, max_value=0.2, value=0.01, step=0.001)
 offset_step = st.sidebar.slider("DP Search Resolution (ft):", min_value=0.1, max_value=2.0, value=0.5, step=0.1)
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 🏆 Leaderboard Standings")
-st.sidebar.info("Public Leaderboard: **0.0000 RMSE** (Perfect Score)\n\nLocal Mean CV: **11.08 ft RMSE**")
 
 # Layout cards
 col1, col2, col3, col4 = st.columns(4)
