@@ -227,7 +227,6 @@ PLOTLY_LAYOUT_THEME = {
     "plot_bgcolor": "rgba(0,0,0,0)",
     "font": {"color": "#ffffff", "family": "DM Sans, sans-serif"},
     "title_font": {"family": "Sora, sans-serif", "size": 15, "color": "#ffffff"},
-    "legend": {"font": {"family": "DM Sans", "size": 11, "color": "#ffffff"}},
     "colorway": ["#00d4ff", "#a855f7", "#34d399", "#fbbf24", "#f87171"]
 }
 
@@ -504,7 +503,10 @@ with tab1:
             title="TVT Profile along Measured Depth (MD)",
             xaxis_title="Measured Depth (MD) [ft]",
             yaxis_title="True Vertical Thickness (TVT) [ft]",
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
+                font=dict(family="DM Sans", size=11, color="#ffffff")
+            ),
             margin=dict(l=40, r=40, t=80, b=40),
             **PLOTLY_LAYOUT_THEME
         )
@@ -568,7 +570,10 @@ with tab1:
             xaxis_title='TVT Depth [ft]',
             yaxis_title='Gamma Ray (GR) [API]',
             margin=dict(l=40, r=40, t=80, b=40),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
+                font=dict(family="DM Sans", size=11, color="#ffffff")
+            ),
             **PLOTLY_LAYOUT_THEME
         )
         fig_gr_tw.update_xaxes(**PLOTLY_AXIS_THEME)
