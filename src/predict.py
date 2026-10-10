@@ -29,13 +29,17 @@ class WellborePredictor:
         if len(self.train_wells_summary) > 0:
             self.kdtree = cKDTree(self.train_wells_summary[['X', 'Y']].values)
             
-    def get_neighbors(self, x_mean, y_mean, k=5):
+    def get_neighbors(self, x_mean, y_mean, k=5, exclude=None):
+        """Nearest training wells by mean position. `exclude` drops the well being
+        predicted, so its own answers never leak into the regional plane."""
         if self.kdtree is None:
             return []
-        dists, indices = self.kdtree.query([x_mean, y_mean], k=k)
+        k_query = min(k + 1, len(self.train_wells_summary))
+        dists, indices = self.kdtree.query([x_mean, y_mean], k=k_query)
         if np.isscalar(dists):
             indices = [indices]
-        return [self.train_wells_summary.iloc[i]['well_id'] for i in indices]
+        ids = [self.train_wells_summary.iloc[i]['well_id'] for i in indices]
+        return [w for w in ids if w != exclude][:k]
 
     def fit_astnl_plane(self, neighbor_ids):
         """
@@ -66,7 +70,7 @@ class WellborePredictor:
         # 1. Fit ASTNL plane on neighbors
         x_mean = df_hw['X'].mean()
         y_mean = df_hw['Y'].mean()
-        neighbor_ids = self.get_neighbors(x_mean, y_mean, k=5)
+        neighbor_ids = self.get_neighbors(x_mean, y_mean, k=5, exclude=well_id)
         plane_astnl = self.fit_astnl_plane(neighbor_ids)
         
         # Predict ASTNL elevation along the wellbore
@@ -152,7 +156,10 @@ class WellborePredictor:
             
         return tvt_ref + path
 
-    def run(self):
+    def run(self, use_train_match=False):
+        """Predict every test well. `use_train_match` copies known answers for test wells
+        that also appear in the training data. That only helps on Kaggle's public
+        leaderboard and says nothing about the model, so it is off by default."""
         test_dir = os.path.join(self.data_dir, 'test')
         train_dir = os.path.join(self.data_dir, 'train')
         test_hw_paths = glob.glob(os.path.join(test_dir, '*__horizontal_well.csv'))
@@ -169,7 +176,7 @@ class WellborePredictor:
             
             # Check for training match override fallback
             train_match_path = os.path.join(train_dir, f"{well_id}__horizontal_well.csv")
-            if os.path.exists(train_match_path):
+            if use_train_match and os.path.exists(train_match_path):
                 print(f"Well {well_id}: Train-match found. Copying true TVT values from train dataset.")
                 df_train = pd.read_csv(train_match_path)
                 df_hw['predicted_tvt'] = df_train['TVT']
@@ -217,5 +224,10 @@ class WellborePredictor:
         print("="*50)
 
 if __name__ == '__main__':
-    predictor = WellborePredictor(data_dir='data')
-    predictor.run()
+    import argparse
+    ap = argparse.ArgumentParser(description='Predict TVT for the test wells and write submission.csv')
+    ap.add_argument('--data-dir', default='data')
+    ap.add_argument('--use-train-match', action='store_true',
+                    help='Copy known answers for test wells that also appear in train (leaderboard only)')
+    args = ap.parse_args()
+    WellborePredictor(data_dir=args.data_dir).run(use_train_match=args.use_train_match)

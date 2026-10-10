@@ -1,6 +1,8 @@
 # ROGII Wellbore Geology Prediction
 
-This repository contains the winning-tier machine learning and optimization pipeline for the **ROGII Wellbore Geology Prediction** competition on Kaggle. The task is to predict the True Vertical Thickness (TVT) along horizontal wellbores beyond the Prediction Start (PS) point, utilizing 3D XYZ trajectory coordinates and Gamma Ray (GR) log profiles.
+A geology-constrained pipeline for the **ROGII Wellbore Geology Prediction** competition on Kaggle. The task is to predict the True Vertical Thickness (TVT) along horizontal wellbores beyond the Prediction Start (PS) point, utilizing 3D XYZ trajectory coordinates and Gamma Ray (GR) log profiles.
+
+**[Try the interactive demo](https://www.konnectingnots.com/demos/wellbore.html)**: the model runs in your browser, and you can change the known section, smoothness and search window. **[Case study](https://www.konnectingnots.com/projects/wellbore-geology.html)**
 
 ---
 
@@ -28,10 +30,22 @@ To match local geological layers, we frame the alignment between the horizontal 
 - **Data Cost:** The squared difference between the horizontal wellbore's GR measurement and the interpolated typewell's GR value at the state depth.
 - **Transition Cost:** A quadratic penalty on the difference between consecutive states, ensuring geological smoothness and preventing sudden non-physical jumps:
   $$C_{\text{trans}} = w_{\text{smooth}} \cdot (\text{offset}_i - \text{offset}_{i-1})^2$$
-Using the Viterbi algorithm, we compute the globally optimal path, achieving a robust validation RMSE of **11.08 feet** on unseen test wells.
+Using the Viterbi algorithm, we compute the globally optimal path through all depth offsets.
 
-### 5. Train-Match Override Fallback
-For the public leaderboard, the three test wells (`00bbac68`, `000d7d20`, and `00e12e8b`) are present in the training dataset. We check for these matches and copy their true TVT values directly, ensuring a perfect **0.0000 RMSE** score. If a well is not present in the training set (e.g., during private leaderboard evaluation), the pipeline automatically falls back to the fully generalized Viterbi path alignment model.
+## 📊 Results
+
+Evaluated with `src/evaluate.py` on the three public sample wells. For each well the depth after the known section is hidden, and the regional plane is fitted only from the *other* wells so the well's own answers can't leak in.
+
+| Well | Points predicted | Baseline only | With path matching |
+|---|---|---|---|
+| 000d7d20 | 3,836 | 19.5 ft | **10.1 ft** |
+| 00bbac68 | 6,014 | 21.4 ft | **16.1 ft** |
+| 00e12e8b | 4,301 | 17.1 ft | **7.2 ft** |
+| **All** | 14,151 | 19.6 ft | **12.4 ft** |
+
+Path matching cuts the error by about 37% over the regional-plane baseline.
+
+> **Note on the public leaderboard:** the three public test wells also appear in the training data, so copying their known values scores a perfect 0. `predict.py` can still do this with `--use-train-match`, but it's off by default because it measures nothing about the model.
 
 ---
 
@@ -42,7 +56,8 @@ For the public leaderboard, the three test wells (`00bbac68`, `000d7d20`, and `0
 │   ├── download_data.py   # Ingests and downloads competition data via Kaggle API
 │   ├── features.py        # Feature engineering, spatial indexing, dipping planes
 │   ├── train.py           # Cross-validation and GBDT residual model trainer
-│   └── predict.py         # Main prediction pipeline (Viterbi + Train-match override)
+│   ├── predict.py         # Main prediction pipeline (plane + bias correction + Viterbi)
+│   └── evaluate.py        # Leave-one-out evaluation on wells with known answers
 ├── requirements.txt       # Python package dependencies
 ├── .gitignore             # Git ignore patterns
 └── README.md              # Documentation
@@ -76,6 +91,11 @@ To generate the final predictions and run the validation suite:
 python src/predict.py
 ```
 This will output `submission.csv` in the root folder, ready for submission!
+
+To reproduce the results table on the sample wells:
+```bash
+python src/evaluate.py --data-dir sample_data
+```
 
 ### 5. Launch the Streamlit Dashboard
 To launch the interactive, high-fidelity visualization dashboard locally:
