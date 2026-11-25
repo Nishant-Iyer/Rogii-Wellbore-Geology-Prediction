@@ -2,7 +2,7 @@
 
 A geology-constrained pipeline for the **[ROGII Wellbore Geology Prediction](https://www.kaggle.com/competitions/rogii-wellbore-geology-prediction)** competition on Kaggle. The problem comes from geosteering, the industry practice of keeping a horizontal well inside a target rock layer while drilling. The task is to predict the True Vertical Thickness (TVT) along horizontal wellbores beyond the Prediction Start (PS) point, utilizing 3D XYZ trajectory coordinates and Gamma Ray (GR) log profiles.
 
-**[Live demo](https://www.konnectingnots.com/demos/wellbore.html)** · **[Case study](https://www.konnectingnots.com/projects/wellbore-geology.html)**
+**[Live demo](https://nishant-iyer.github.io/demos/wellbore.html)** · **[Case study](https://nishant-iyer.github.io/projects/wellbore-geology.html)**
 
 The demo runs the model in your browser, and you can change the known section, smoothness and search window.
 
